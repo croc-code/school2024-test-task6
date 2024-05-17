@@ -20,7 +20,7 @@ class ImbalanceSensor:
                 worker = (row[0], f"{row[1]} {row[2]} {row[3]}")
                 statistics[worker] -= float(row[-1])
 
-        sorted_workers = sorted(statistics.keys(), key=lambda w: (statistics[w] < 0, w))
+        sorted_workers = sorted(statistics.keys(), key=lambda w: (statistics[w] < 0, w[1]))
         with open(result_path, "w") as f:
             for worker in sorted_workers:
                 imbalance = abs(statistics[worker]) / standard * 100

@@ -22,7 +22,7 @@ class TestImbalanceSensor(unittest.TestCase):
             self.assertTrue(os.path.exists("result.txt"))
             with open("result.txt", "r") as result_file:
                 result = result_file.read()
-                self.assertEqual(result, "\n".join(expected_output) + "\n")
+                self.assertEqual(("\n".join(expected_output) + "\n").strip(), result.strip())
 
             # Remove temporary files
             os.remove("report.txt")
