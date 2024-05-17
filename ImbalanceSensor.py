@@ -10,9 +10,11 @@ class ImbalanceSensor:
         result_path: str = result_path if result_path else "result.txt"
         statistics = defaultdict(lambda: self.get_standard())
 
-        standard = self.get_standard()
-        if standard is None:
-            return
+        # Result should exist even if data is incorrect
+        with open(result_path, "w") as f:
+            standard = self.get_standard()
+            if standard is None:
+                return
 
         for row in self.get_report():
             if row:
