@@ -20,18 +20,19 @@ class ImbalanceSensor:
                 worker = (row[0], f"{row[1]} {row[2]} {row[3]}")
                 statistics[worker] -= float(row[-1])
 
-        sorted_workers = sorted(statistics.keys(), key=lambda w: (statistics[w] > 0, w))
+        sorted_workers = sorted(statistics.keys(), key=lambda w: (statistics[w] < 0, w))
         with open(result_path, "w") as f:
             for worker in sorted_workers:
                 imbalance = abs(statistics[worker]) / standard * 100
                 if imbalance > 10:
                     name = self.abbreviate_name(worker[1])
                     value = -1 * statistics[worker]
+                    sign, value = "+" if value > 0 else "-", abs(value)
 
                     if value.is_integer():
-                        f.write(f"{name} {int(value)}\n")
+                        f.write(f"{name} {sign}{int(value)}\n")
                     else:
-                        f.write(f"{name} {value}\n")
+                        f.write(f"{name} {sign}{value}\n")
 
     def get_standard(self) -> Optional[float]:
         try:
