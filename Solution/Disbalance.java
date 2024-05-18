@@ -1,3 +1,5 @@
+package Solution;
+
 /**
  * Класс, представляющий дизбаланс списаний времени сотрудником.
  */
@@ -7,7 +9,7 @@ public class Disbalance {
     private double disbalance;
 
     /**
-     * Конструктор класса Disbalance.
+     * Конструктор класса Solution.Disbalance.
      *
      * @param fullName полное имя сотрудника
      * @param disbalance значение дизбаланса
