@@ -79,7 +79,6 @@ public class TimeBalanceAnalyzer {
         return imbalance;
     }
 
-    //запись в файл
     private void writeResults(String filename, Map<String, Double> imbalance, Map<String, String> employeeNames) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             TreeMap<String, Double> sortedImbalance = sortImbalanceByName(imbalance, employeeNames);
@@ -87,20 +86,21 @@ public class TimeBalanceAnalyzer {
             //с отрицательной разницей
             for (Map.Entry<String, Double> entry : sortedImbalance.entrySet()) {
                 if (entry.getValue() < 0) {
-                    writer.write(employeeNames.get(entry.getKey()) + " " + entry.getValue() + "\n");
+                    writer.write(employeeNames.get(entry.getKey()) + " " + (int) Math.round(entry.getValue()) + "\n");
                 }
             }
 
             // с положительной разницей
             for (Map.Entry<String, Double> entry : sortedImbalance.entrySet()) {
                 if (entry.getValue() > 0) {
-                    writer.write(employeeNames.get(entry.getKey()) + " +" + entry.getValue() + "\n");
+                    writer.write(employeeNames.get(entry.getKey()) + " +" + (int) Math.round(entry.getValue()) + "\n");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
     private TreeMap<String, Double> sortImbalanceByName(Map<String, Double> imbalance, Map<String, String> employeeNames) {
         TreeMap<String, Double> sortedImbalance = new TreeMap<>((id1, id2) -> {
