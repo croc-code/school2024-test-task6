@@ -1,0 +1,3 @@
+Test writing to result file
+Петров А. С. -3
+Журавлева Е. А. +4

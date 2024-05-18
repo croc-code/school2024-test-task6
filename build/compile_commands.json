@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/stepanov/Documents/vs_code/crock/school2024-test-task6/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/Imbalance_monitoring.dir/src/main.cpp.o -c /home/stepanov/Documents/vs_code/crock/school2024-test-task6/src/main.cpp",
+  "file": "/home/stepanov/Documents/vs_code/crock/school2024-test-task6/src/main.cpp"
+},
+{
+  "directory": "/home/stepanov/Documents/vs_code/crock/school2024-test-task6/build",
+  "command": "/usr/bin/g++   -g -o CMakeFiles/Imbalance_monitoring.dir/src/tools.cpp.o -c /home/stepanov/Documents/vs_code/crock/school2024-test-task6/src/tools.cpp",
+  "file": "/home/stepanov/Documents/vs_code/crock/school2024-test-task6/src/tools.cpp"
+}
+]
