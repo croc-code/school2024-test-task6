@@ -1,0 +1,3 @@
+/home/stepanov/Documents/vs_code/crock/school2024-test-task6/build/CMakeFiles/Imbalance_monitoring.dir
+/home/stepanov/Documents/vs_code/crock/school2024-test-task6/build/CMakeFiles/edit_cache.dir
+/home/stepanov/Documents/vs_code/crock/school2024-test-task6/build/CMakeFiles/rebuild_cache.dir
