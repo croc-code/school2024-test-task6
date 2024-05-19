@@ -1,0 +1,5 @@
+{
+  "input" : "report.txt",
+  "output" : "result.txt",
+  "percent_of_normal_worktime" : 10
+}
