@@ -1,8 +1,8 @@
 ﻿namespace ImbalanceAnalyzer;
 
-public class Result
+public class ResultRecord
 {
-    public Result(string name, float hours)
+    public ResultRecord(string name, float hours)
     {
         Name = name;
         Hours = hours;

@@ -2,14 +2,14 @@
 
 public class ResultCompiler
 {
-    public List<Result> Compile(ParsedTsr3 file)
+    public List<ResultRecord> Compile(ParsedTsr3 file)
     {
         float standard = file.Standard;
-        var map = new Dictionary<Guid, Result>();
+        var map = new Dictionary<Guid, ResultRecord>();
 
         foreach (var fileRecord in file.Records)
         {
-            if (!map.TryAdd(fileRecord.Uuid, new Result(fileRecord.Name, -24f + fileRecord.DebitingHours)))
+            if (!map.TryAdd(fileRecord.Uuid, new ResultRecord(fileRecord.Name, -24f + fileRecord.DebitingHours)))
             {
                 map[fileRecord.Uuid].Hours += fileRecord.DebitingHours;
             }

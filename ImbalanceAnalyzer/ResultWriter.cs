@@ -2,7 +2,7 @@
 
 public class ResultWriter
 {
-    public void Write(StreamWriter writer, List<Result> results)
+    public void Write(StreamWriter writer, List<ResultRecord> results)
     {
         var pluses = results
             .Where(record => record.Hours > 0)
