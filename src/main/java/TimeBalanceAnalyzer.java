@@ -3,11 +3,18 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public class TimeBalanceAnalyzer {
+    private static final Logger LOGGER = Logger.getLogger(TimeBalanceAnalyzer.class.getName());
+
     private int weeklyNorm;
     private final Map<String, Double> timeSpent;
     private final Map<String, String> employeeNames;
@@ -18,20 +25,15 @@ public class TimeBalanceAnalyzer {
         this.employeeNames = new HashMap<>();
     }
 
-    /**
-     * Анализирует разницу списания времени сотрудниками за неделю и записывает результат в файл.
-     *
-     * @param filename имя файла, содержащего списки списаний времени сотрудников за неделю
-     */
     public void analyzeTimeBalance(String filename) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filename))) {
             weeklyNorm = readWeeklyNorm(reader);
 
             readTimeEntries(reader, timeSpent, employeeNames);
             Map<String, Double> imbalance = calculateImbalance(timeSpent, weeklyNorm);
             writeResults("result.txt", imbalance, employeeNames);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.severe("Error processing file " + filename + ": " + e.getMessage());
         }
     }
 
@@ -60,47 +62,37 @@ public class TimeBalanceAnalyzer {
         return lastName + " " + firstName.charAt(0) + "." + middleName.charAt(0) + ".";
     }
 
-    /**
-     * Вычисляет дисбаланс списания времени сотрудниками.
-     *
-     * @param timeSpent  мапа списанных временных часов сотрудниками
-     * @param weeklyNorm недельная норма списания времени на сотрудника
-     * @return мапа дисбаланса списания времени сотрудников
-     */
     private Map<String, Double> calculateImbalance(Map<String, Double> timeSpent, int weeklyNorm) {
-        Map<String, Double> imbalance = new HashMap<>();
-        for (Map.Entry<String, Double> entry : timeSpent.entrySet()) {
-            double hours = entry.getValue();
-            double normDiff = hours - weeklyNorm;
-            if (Math.abs(normDiff) > (weeklyNorm * 0.1)) {
-                imbalance.put(entry.getKey(), normDiff);
-            }
-        }
-        return imbalance;
+        return timeSpent.entrySet().stream()
+                .map(entry -> {
+                    double hours = entry.getValue();
+                    double normDiff = hours - weeklyNorm;
+                    return Math.abs(normDiff) > (weeklyNorm * 0.1) ? Optional.of(Map.entry(entry.getKey(), normDiff)) : Optional.<Map.Entry<String, Double>>empty();
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     private void writeResults(String filename, Map<String, Double> imbalance, Map<String, String> employeeNames) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filename))) {
             TreeMap<String, Double> sortedImbalance = sortImbalanceByName(imbalance, employeeNames);
 
-            //с отрицательной разницей
             for (Map.Entry<String, Double> entry : sortedImbalance.entrySet()) {
                 if (entry.getValue() < 0) {
                     writer.write(employeeNames.get(entry.getKey()) + " " + (int) Math.round(entry.getValue()) + "\n");
                 }
             }
 
-            // с положительной разницей
             for (Map.Entry<String, Double> entry : sortedImbalance.entrySet()) {
                 if (entry.getValue() > 0) {
                     writer.write(employeeNames.get(entry.getKey()) + " +" + (int) Math.round(entry.getValue()) + "\n");
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.severe("Error writing to file " + filename + ": " + e.getMessage());
         }
     }
-
 
     private TreeMap<String, Double> sortImbalanceByName(Map<String, Double> imbalance, Map<String, String> employeeNames) {
         TreeMap<String, Double> sortedImbalance = new TreeMap<>((id1, id2) -> {

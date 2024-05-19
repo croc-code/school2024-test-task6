@@ -29,7 +29,7 @@ public class TimeBalanceAnalyzerTest {
             String resultContent = new String(Files.readAllBytes(resultFile.toPath()));
             StringBuilder sb = new StringBuilder();
             sb.append("Иванов И.И. -3.0\n");
-            sb.append("Петров А.С. +5.0\n");
+            sb.append("Петров А.С. +4.0\n");
             String expectedContent = sb.toString();
 
             assertEquals(expectedContent, resultContent);
@@ -46,7 +46,7 @@ public class TimeBalanceAnalyzerTest {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("24\n");
             writer.write("a30b4d51-11b4-49b2-b356-466e92a66df7 Иванов Иван Иванович 06.05.2024 21\n");
-            writer.write("0f0ccd5e-cd46-462a-b92d-69a6ff147465 Петров Алексей Сергеевич 06.05.2024 29\n");
+            writer.write("0f0ccd5e-cd46-462a-b92d-69a6ff147465 Петров Алексей Сергеевич 06.05.2024 28\n");
             writer.write("0f0ccd5e-cd46-462a-b92d-69a6ff147463 Петров Алексей Игоревич 06.05.2024 24\n");
         } catch (IOException e) {
             e.printStackTrace();
