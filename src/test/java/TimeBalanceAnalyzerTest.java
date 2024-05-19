@@ -28,8 +28,8 @@ public class TimeBalanceAnalyzerTest {
         try {
             String resultContent = new String(Files.readAllBytes(resultFile.toPath()));
             StringBuilder sb = new StringBuilder();
-            sb.append("Иванов И.И. -3.0\n");
-            sb.append("Петров А.С. +4.0\n");
+            sb.append("Иванов И.И. -3\n");
+            sb.append("Петров А.С. +4\n");
             String expectedContent = sb.toString();
 
             assertEquals(expectedContent, resultContent);
