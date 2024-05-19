@@ -50,7 +50,7 @@ class Solution:
     def process_data_loop(self, path: str) -> list[list]:
         """
         Преобразует содержимое файла в словарь, в котором
-        ключом является ID, а занятость - 
+        ключом является ID, а занятость -
         [отформатированное имя, суммарная занятость за неделю]
         """
         compressed_data = {}
@@ -61,13 +61,8 @@ class Solution:
             for line in line_gen:
                 person_data = line.split()
                 self.data_checker.check_data_general(person_data)
-                last_name, first_name, mid_name = (
-                    person_data[1],
-                    person_data[2][0],
-                    person_data[3][0],
-                )
                 formatted_data = self.format_name(
-                    person_data, last_name, first_name, mid_name
+                    person_data,
                 )
                 identificator = formatted_data[0]
                 self.data_checker.check_hours(formatted_data[-1])
@@ -89,14 +84,17 @@ class Solution:
             print(f"{error}")
         return None
 
-    def format_name(
-        self, person_data: list, last_name: str, first_name: str, mid_name: str
-    ) -> list:
+    def format_name(self, person_data: list) -> list:
         """
         Меняется формат имени: Surname Name Midname -> Surname N.M.
         """
         count = 3
         name_index = 1
+        last_name, first_name, mid_name = (
+            person_data[1],
+            person_data[2][0],
+            person_data[3][0],
+        )
         while count > 0:
             person_data.pop(name_index)
             count -= 1
