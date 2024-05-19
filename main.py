@@ -24,7 +24,7 @@ def get_report_data(path):
 	disbalance = []
 	for id in data:
 		diff = abs(data[id][-1] - work_time)
-		if diff >= work_time * work_part / 100:
+		if diff > work_time * work_part / 100:
 			hours = int(diff) if int(diff) == diff else diff
 			disbalance.append([work_time < data[id][-1]] + data[id][:1] + [str(hours)])
 	disbalance.sort()
