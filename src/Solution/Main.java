@@ -1,4 +1,4 @@
-package Solution;
+package src.Solution;
 
 import java.io.BufferedWriter;
 import java.io.IOException;

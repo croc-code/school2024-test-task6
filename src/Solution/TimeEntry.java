@@ -1,4 +1,4 @@
-package Solution;
+package src.Solution;
 
 /**
  * Класс, представляющий запись о списании времени сотрудником.
@@ -12,7 +12,7 @@ public class TimeEntry {
     private double hours;
 
     /**
-     * Конструктор класса Solution.TimeEntry.
+     * Конструктор класса src.Solution.TimeEntry.
      *
      * @param uuid UUID сотрудника
      * @param lastName Фамилия сотрудника
@@ -31,10 +31,10 @@ public class TimeEntry {
     }
 
     /**
-     * Парсит строку в объект Solution.TimeEntry.
+     * Парсит строку в объект src.Solution.TimeEntry.
      *
      * @param line строка с данными о списании времени
-     * @return объект Solution.TimeEntry
+     * @return объект src.Solution.TimeEntry
      */
     public static TimeEntry parse(String line) {
         String[] parts = line.split("\\s+");
