@@ -5,8 +5,8 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var readPath = Path.GetFullPath("../../../../report.txt");
-        var writePath = Path.GetFullPath("../../../../result.txt");
+        var readPath = Path.GetFullPath("./report.txt");
+        var writePath = Path.GetFullPath("./result.txt");
 
         
         var parser = new Tsr3Parser();
