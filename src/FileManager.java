@@ -10,10 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 public class FileManager {
+    //Считываем входной файл
     public static List<String> readFile(String filePath) throws IOException {
         return Files.readAllLines(Paths.get(filePath));
     }
-
+    //Записываем данные в выходной файл
     public static void writeFile(String filePath, List<String> lines) throws IOException {
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
             for (String line : lines) {
@@ -22,7 +23,7 @@ public class FileManager {
             }
         }
     }
-
+    //Разбиваем на части входную строку и собираем в нужном формате
     public static void processLines(List<String> lines, Map<String, Double> employeeHours, Map<String, String> employeeNames) {
         for (int i = 1; i < lines.size(); i++) {
             String[] parts = lines.get(i).split(" ");
@@ -37,7 +38,7 @@ public class FileManager {
             employeeHours.put(id, employeeHours.getOrDefault(id, 0.0) + hours);
         }
     }
-
+    //Ищем дизбаланс и добавляем в соотвтетсвующий список
     public static List<String> analyzeDisbalance(int weeklyNorm, Map<String, Double> employeeHours, Map<String, String> employeeNames) {
         List<String> underBalanced = new ArrayList<>();
         List<String> overBalanced = new ArrayList<>();
@@ -67,3 +68,4 @@ public class FileManager {
         return result;
     }
 }
+
