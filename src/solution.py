@@ -63,7 +63,7 @@ class DataChecker:
 
 class Solution:
     def __init__(self) -> None:
-        self.path = "../report.txt"
+        self.path = "report.txt"
         self.res_path = "result.txt"
         self.data_checker = DataChecker()
 
