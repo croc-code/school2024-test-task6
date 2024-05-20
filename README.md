@@ -42,7 +42,151 @@ a30b4d51-11b4-49b2-b356-466e92a66df7 Иванов Иван Иванович 16.0
 Примеры входного и выходного файлов приложены к настоящему техническому заданию.
 
 ## Автор решения
+### Гладилин Алексей Алексеевич
 
 ## Описание реализации
+Данная программа предназначена для анализа списка рабочих часов сотрудников за неделю на основе формата отчета "TSR-3". Программа определяет сотрудников, у которых дизбаланс списаний времени за неделю составляет более 10% в одну из сторон, и записывает результаты в текстовый файл. Ниже приведено пошаговое описание реализации программы.
+
+### Шаг 1: Парсинг данных из входного файла
+#### Чтение файла
+Открывается файл report.txt, содержащий недельную норму списаний и данные о списаниях сотрудников.
+```rust
+let file = File::open("report.txt")?;
+let reader = io::BufReader::new(file);
+```
+
+#### Чтение недельной нормы списаний
+Первая строка файла содержит недельную норму списаний на одного сотрудника, которую мы читаем и парсим как f32.
+
+```rust
+let disbalance_threshold: f32 = lines.next().unwrap().unwrap().parse().unwrap();
+```
+#### Парсинг данных сотрудников
+Остальные строки файла содержат данные о списаниях сотрудников в формате TSR-3. Мы парсим каждую строку и сохраняем данные в вектор tsr3_vec.
+```rust
+for line in lines {
+    let l: String = line.unwrap();
+    tsr3_vec.push(tsr3::get_entry(&l));
+}
+```
+### Шаг 2: Обработка данных
+#### Структура Tsr3Entry
+Представляет запись TSR-3 с полями: employee_id, surname, name, patronymic, date, time.
+```rust
+pub struct Tsr3Entry {
+    pub employee_id: String,
+    pub surname: String,
+    pub name: String,
+    pub patronymic: String,
+    pub date: NaiveDate,
+    pub time: f32
+}
+```
+#### Функция get_entry
+Парсит строку и создает объект Tsr3Entry.
+```rust
+pub fn get_entry(s: &String) -> Tsr3Entry {
+    let mut elems = s.split_whitespace();
+    let employee_id = elems.next().unwrap().to_string();
+    let surname = elems.next().unwrap().to_string();
+    let name = elems.next().unwrap().to_string();
+    let patronymic = elems.next().unwrap().to_string();
+    let date = parse_date(elems.next().unwrap().to_string()).unwrap();
+    let time = elems.next().unwrap().parse().unwrap();
+
+    Tsr3Entry {
+        employee_id,
+        surname,
+        name,
+        patronymic,
+        date,
+        time,
+    }
+}
+```
+#### Функция make_time_map
+Создает карту времени, ассоциированного с каждым сотрудником.
+```rust
+fn make_time_map(tsr3_vec: &Vec<Tsr3Entry>) -> HashMap<(String, String), f32> {
+    let mut time_map: HashMap<(String, String), f32> = HashMap::new();
+
+    for e in tsr3_vec {
+        let full_name = format!("{} {} {}", e.surname, e.name, e.patronymic);
+        let key = (e.employee_id.clone(), full_name);
+        time_map.entry(key).and_modify(|time| *time += e.time).or_insert(e.time);
+    }
+
+    time_map
+}
+```
+#### Функция make_disbalanced_time_map
+Определяет сотрудников с дисбалансом списаний, превышающим 10% порог. Создает список с краткими именами сотрудников и их дисбалансом, сортированный по знаку и имени.
+```rust
+pub fn make_disbalanced_time_map(tsr3_vec: &Vec<Tsr3Entry>, threshold: f32) -> Vec<(String, String)> {
+    let time_map = make_time_map(tsr3_vec);
+    let mut res: HashMap<String, String> = HashMap::new();
+
+    for ((employee_id, full_name), v) in time_map {
+        let disbalance = v - threshold;
+        if disbalance > threshold * 0.1 || disbalance < threshold * -0.1 {
+            let mut split_name = full_name.split_whitespace();
+            let short_name = format!(
+                "{} {}.{}.",
+                split_name.next().unwrap(),
+                split_name.next().unwrap().chars().next().unwrap(),
+                split_name.next().unwrap().chars().next().unwrap()
+            );
+
+            let key = format!("{} ({})", short_name, employee_id);
+            res.insert(key, if disbalance < 0.0 { disbalance.to_string() } else { format!("+{}", disbalance) });
+        }
+    }
+
+    let mut res_vec: Vec<(_, _)> = res.into_iter().collect();
+    res_vec.sort_by(|a, b| {
+        let sign_a = a.1.starts_with('-');
+        let sign_b = b.1.starts_with('-');
+        sign_b.cmp(&sign_a).then_with(|| a.0.cmp(&b.0))
+    });
+
+    res_vec
+}
+```
+### Шаг 3: Запись результатов в файл
+#### Создание файла для записи
+Создаем файл result.txt для записи результатов.
+```rust
+let mut result = File::create("result.txt")?;
+```
+#### Запись данных
+Записываем результаты в файл, следуя требуемому формату.
+```rust
+for (k, v) in &filtered_map {
+    writeln!(result, "{} {}", k, v)?;
+}
+```
+
+В итоге этот код выполняет парсинг данных из файла, анализирует дизбаланс времени сотрудников и записывает результаты в выходной файл с учетом уникальных идентификаторов сотрудников.
+
 
 ## Инструкция по сборке и запуску решения
+0. [Установите Rust](https://www.rust-lang.org/tools/install)
+1. Клонируйте репозиторий.
+```bash
+git clone https://github.com/nemopss/school2024-test-task6.git
+```
+2. Перейдите в папку с проектом.
+```bash
+cd school2024-test-task6
+```
+3. Загрузите файл _report.txt_ в данную папку.
+
+4. Скомпилируйте проект.
+```bash
+cargo build
+```
+5. Запустите проект.
+```bash
+cargo run
+```
+При успешном выполнении программа прочитает данные из файла report.txt, проанализирует их и создаст файл result.txt, содержащий результаты анализа.
