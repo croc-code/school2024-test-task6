@@ -13,6 +13,9 @@ class DataChecker:
         length = 6
         if len(contents) != length:
             raise ArgumentCountError
+        for elem in contents:
+            if not elem:
+                raise ArgumentCountError
 
     def check_hours(self, hours):
         """
