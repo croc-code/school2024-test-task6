@@ -91,7 +91,8 @@ a30b4d51-11b4-49b2-b356-466e92a66df7 Иванов Иван Иванович 16.0
    git clone https://github.com/PlatonShilovich/school2024-test-task6.git
    cd school2024-test-task6
 1. **Запуск программы**:
-   ```python main.py
+   ```bash
+   python main.py
 1. **Клонирование репозитория**:
    ```bash
    git clone https://github.com/PlatonShilovich/school2024-test-task6.git
