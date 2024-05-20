@@ -1,5 +1,5 @@
 class ArgumentCountError(Exception):
-    def __init__(self, message="Неверное количество аргументов в строке файла."):
+    def __init__(self, message="Неверное количество аргументов в строке."):
         self.message = message
         super().__init__(self.message)
 

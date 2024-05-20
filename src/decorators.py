@@ -14,8 +14,8 @@ def exception_decorator(func):
             print(f"{error}")
         except DateError as error:
             print(f"{error}")
-        except StopIteration as error:
-            print(f"{error}")
+        except FileNotFoundError:
+            print("Файл не найден.")
         return None
 
     return wrapper

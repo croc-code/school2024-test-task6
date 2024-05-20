@@ -47,6 +47,11 @@ class DataChecker:
             raise CollisionError
 
     def is_float(self, value) -> bool:
+        """
+        Вспомогательная функция для check_hours().
+        Проверяет можно ли конвертировать переданное
+        значение в тип float.
+        """
         try:
             value = float(value)
             return True
@@ -54,6 +59,11 @@ class DataChecker:
             return False
 
     def is_date(self, value) -> bool:
+        """
+        Вспомогательная функция для check_date().
+        Проверяет можно ли конвертировать переданное
+        значение в тип datetime.
+        """
         try:
             value = datetime.strptime(value, "%d.%m.%Y")
             return True
@@ -71,24 +81,21 @@ class Solution:
         """
         Функция-генератор, выдает по одной строке файла за раз.
         """
-        try:
-            with open(path, "r", encoding="utf-8") as file:
-                plan = file.readline().strip()
-                yield plan
-                for line in file:
-                    yield line.strip()
-        except FileNotFoundError:
-            print("Файл не найден.")
+        with open(path, "r", encoding="utf-8") as file:
+            plan = file.readline().strip()
+            yield plan
+            for line in file:
+                yield line.strip()
 
     @exception_decorator
     def process_data_loop(self, path: str) -> list[list]:
         """
         Преобразует содержимое файла в словарь, в котором
-        ключом является ID, а занятость -
+        ключом является ID, а значение -
         [отформатированное имя, суммарная занятость за неделю]
         """
         compressed_data = {}
-        dates = []
+        dates = []  # нужен для проверки дат на корректность
         line_gen = self.get_line_generator(path)
         plan = next(line_gen)
         self.data_checker.check_hours(str(plan))
