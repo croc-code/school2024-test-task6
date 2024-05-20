@@ -41,7 +41,7 @@ public class Solution {
                 outputFilePath = cmd.getOptionValue("o");
             }
         } catch (ParseException e) {
-            throw new RuntimeException(e);
+            System.out.println("Unable to parse args");
         }
     }
 
@@ -67,7 +67,7 @@ public class Solution {
                 }
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("Reading error");
         }
     }
 
@@ -102,7 +102,7 @@ public class Solution {
                 ));
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            System.out.println("Writing error");
         }
     }
 }
