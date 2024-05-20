@@ -44,7 +44,16 @@ a30b4d51-11b4-49b2-b356-466e92a66df7 Иванов Иван Иванович 16.0
 ## Автор решения
 ### Вячеслав Петров
 ## Описание реализации
-В файле ```exceptions.py``` лежат 3 исключения: <br>
+В файле ```decorators.py``` лежит декоратор:
+```python
+def exception_decorator(func):
+    """
+    Предназначен для обработки исключений, которые
+    могут возникнуть при выполнении функции 
+    process_data_loop.
+    """
+```
+В файле ```exceptions.py``` лежат 4 исключения: <br>
 ```python
 class ArgumentCountError(Exception):
 # Выкидывается в случае неверного количества аргументов в строке файла.
@@ -57,6 +66,10 @@ class CollisionError(Exception):
 class HoursError(Exception):
 # Выкидывается в случае неверного формата переданной недельной нормы или неверного формата времени, затраченного сотрудником на выполнение задачи.
 ```
+```python
+class DateError(Exception):
+# Выкидывается в случае неверного формата переданной даты или в случае неверно переданного диапазона дат (превышает 7 дней).
+```
 В файле ```solution.py``` лежат 2 класса: <br>
 ```python
 class DataChecker:
@@ -66,27 +79,28 @@ class DataChecker:
 class Solution:
 # Содержит 5 функций, отвечающих за реализацию функционала:
     def get_line_generator(self, path: str): 
-      """
-      Функция-генератор, выдает по одной строке файла за раз.
-      """
+        """
+        Функция-генератор, выдает 
+        по одной строке файла за раз.
+        """
     
     def process_data_loop(self, path: str) -> list[list]:
         """
         Преобразует содержимое файла в словарь, в котором
-        ключом является ID, а занятость - 
-        [отформатированное имя, суммарная занятость за неделю]
+        ключом является ID, а значением - 
+        [отформатированное имя, занятость за неделю]
         """
 
-    def format_name(
-        self, person_data: list, last_name: str, first_name: str, mid_name: str
-    ) -> list:
+    def format_name(self, person_data: list) -> list:
         """
-        Меняется формат имени: Surname Name Midname -> Surname N.M.
+        Меняется формат имени: 
+        Surname Name Midname -> Surname N.M.
         """
 
     def compressed_data_formatter(self) -> list[list]:
         """
-        Функция находит отклоняющиеся более чем на 10 процентов
+        Функция находит отклоняющиеся 
+        более чем на 10 процентов
         значения и записывает их в результат.
         """
         
@@ -98,7 +112,7 @@ class Solution:
 
 ## Инструкция по сборке и запуску решения
 ```bash
-git clone <repo http>
+git clone <ссылка на репозиторий>
 cd school2024-test-task6/src
 cp <путь к файлу "report.txt"> .
 python3 solution.py

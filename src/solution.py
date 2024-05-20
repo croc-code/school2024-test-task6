@@ -1,9 +1,15 @@
-from exceptions import ArgumentCountError, HoursError, CollisionError
+from datetime import datetime
+
+from decorators import exception_decorator
+from exceptions import (ArgumentCountError, CollisionError, DateError,
+                        HoursError)
 
 
 class DataChecker:
     def check_data_general(self, contents: list):
-        """Проверка на полноту переданных аргументов."""
+        """
+        Проверка на полноту переданных аргументов.
+        """
         length = 6
         if len(contents) != length:
             raise ArgumentCountError
@@ -15,6 +21,28 @@ class DataChecker:
         if not self.is_float(hours) and not hours.isdigit():
             raise HoursError
 
+    def check_date(self, dates):
+        """
+        Проверка введенных дат на корректность.
+        """
+        unique_dates = set()
+        for date in dates:
+            if not self.is_date(date):
+                raise DateError
+            date_obj = datetime.strptime(date, "%d.%m.%Y")
+            unique_dates.add(date_obj)
+        min_date = min(unique_dates)
+        max_date = max(unique_dates)
+        if (max_date - min_date).days > 7:
+            raise DateError("Диапазон дат превышает 7 дней.")
+
+    def check_collision(self, dictionary, id, name):
+        """
+        Проверка на наличие нескольких людей с одним ID
+        """
+        if dictionary[id][0] != name:
+            raise CollisionError
+
     def is_float(self, value) -> bool:
         try:
             value = float(value)
@@ -22,10 +50,12 @@ class DataChecker:
         except ValueError:
             return False
 
-    def check_collision(self, dictionary, id, name):
-        """Проверка на наличие нескольких людей с одним ID"""
-        if dictionary[id][0] != name:
-            raise CollisionError
+    def is_date(self, value) -> bool:
+        try:
+            value = datetime.strptime(value, "%d.%m.%Y")
+            return True
+        except ValueError:
+            return False
 
 
 class Solution:
@@ -45,8 +75,9 @@ class Solution:
                 for line in file:
                     yield line.strip()
         except FileNotFoundError:
-            print(f"Файл не найден.")
+            print("Файл не найден.")
 
+    @exception_decorator
     def process_data_loop(self, path: str) -> list[list]:
         """
         Преобразует содержимое файла в словарь, в котором
@@ -54,35 +85,29 @@ class Solution:
         [отформатированное имя, суммарная занятость за неделю]
         """
         compressed_data = {}
+        dates = []
         line_gen = self.get_line_generator(path)
-        try:
-            plan = next(line_gen)
-            self.data_checker.check_hours(str(plan))
-            for line in line_gen:
-                person_data = line.split()
-                self.data_checker.check_data_general(person_data)
-                formatted_data = self.format_name(
-                    person_data,
+        plan = next(line_gen)
+        self.data_checker.check_hours(str(plan))
+        for line in line_gen:
+            person_data = line.split()
+            self.data_checker.check_data_general(person_data)
+            formatted_data = self.format_name(person_data)
+            identificator = formatted_data[0]
+            self.data_checker.check_hours(formatted_data[-1])
+            person_hours = float(formatted_data[-1])
+            person_name = formatted_data[1]
+            if identificator in compressed_data:
+                self.data_checker.check_collision(
+                    compressed_data, identificator, person_name
                 )
-                identificator = formatted_data[0]
-                self.data_checker.check_hours(formatted_data[-1])
-                person_hours = float(formatted_data[-1])
-                person_name = formatted_data[1]
-                if identificator in compressed_data:
-                    self.data_checker.check_collision(
-                        compressed_data, identificator, person_name
-                    )
-                    compressed_data[identificator][1] += person_hours
-                else:
-                    compressed_data[identificator] = [person_name, person_hours]
-            return compressed_data, float(plan)
-        except HoursError as error:
-            print(f"{error}")
-        except ArgumentCountError as error:
-            print(f"{error}")
-        except CollisionError as error:
-            print(f"{error}")
-        return None
+                compressed_data[identificator][1] += person_hours
+            else:
+                compressed_data[identificator] = [person_name, person_hours]
+            date = person_data[2]
+            dates.append(date)
+        self.data_checker.check_date(dates)
+        return compressed_data, float(plan)
 
     def format_name(self, person_data: list) -> list:
         """

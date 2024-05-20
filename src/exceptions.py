@@ -1,5 +1,5 @@
 class ArgumentCountError(Exception):
-    def __init__(self, message="Неверное количество аргументов"):
+    def __init__(self, message="Неверное количество аргументов в строке файла."):
         self.message = message
         super().__init__(self.message)
 
@@ -8,7 +8,7 @@ class ArgumentCountError(Exception):
 
 
 class CollisionError(Exception):
-    def __init__(self, message="Два разных человека имеют одинаковый id!"):
+    def __init__(self, message="Два разных человека имеют одинаковый id."):
         self.message = message
         super().__init__(self.message)
 
@@ -17,9 +17,18 @@ class CollisionError(Exception):
 
 
 class HoursError(Exception):
-    def __init__(self, message="Неверно указано время работы"):
+    def __init__(self, message="Неверно указано время работы."):
         self.message = message
         super().__init__(self.message)
 
     def __str__(self):
         return f"HoursError: {self.message}"
+
+
+class DateError(Exception):
+    def __init__(self, message="Неверный формат переданной даты."):
+        self.message = message
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f"DateError: {self.message}"
