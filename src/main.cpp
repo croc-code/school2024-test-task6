@@ -100,7 +100,13 @@ int main()
             }
             else
             {
-                InfoWeek[Person[0]].Worktime += stod(Person[5]);
+                if (InfoWeek[Person[0]].Name == (Person[1])) //Если у разнофамильцев почему-то одинаковое UUID, то вероятно сбой/ошибка в UUID. Такие ситуации крайне-крайне маловероятны
+                    InfoWeek[Person[0]].Worktime += stod(Person[5]);
+                else
+                {
+                    std::cout << "Different Person with same UUID. Check UUID generator" << '\n';
+                    std::exit(1);
+                }
             }
         }
     }
@@ -111,7 +117,7 @@ int main()
     if (fout.is_open())
     {
         std::vector<std::pair<std::string, double>> OverWorkedPersonPlus;
-        std::vector<std::pair<std::string, double>> OverWorkedPersonMinus;
+        std::vector<std::pair<std::string, double>> UnderWorkedPersonMinus;
 
         for (auto& [_, info] : InfoWeek)
         {
@@ -124,20 +130,21 @@ int main()
 
             if (info.Worktime < hours * 0.9)
             {
-                OverWorkedPersonMinus.push_back(std::make_pair(info.Name + ' ' + GetFirstUTF8Char(info.MiddleName) +
+                UnderWorkedPersonMinus.push_back(std::make_pair(info.Name + ' ' + GetFirstUTF8Char(info.MiddleName) +
                                                                    '.' + GetFirstUTF8Char(info.LastName) + '.',
                                                                info.Worktime - hours));
             }
         }
-        std::sort(OverWorkedPersonMinus.begin(), OverWorkedPersonMinus.end(), compareByUTF8);
+        std::sort(UnderWorkedPersonMinus.begin(), UnderWorkedPersonMinus.end(), compareByUTF8);
         std::sort(OverWorkedPersonPlus.begin(), OverWorkedPersonPlus.end(), compareByUTF8);
 
-        for (const auto& [name, time] : OverWorkedPersonMinus)
+        for (const auto& [name, time] : UnderWorkedPersonMinus)
         {
             fout << name << ' ' << time << '\n';
         }
 
-        fout << OverWorkedPersonPlus[0].first << " +" << OverWorkedPersonPlus[0].second;
+        if(!OverWorkedPersonPlus.empty()) //OverWorkedPersonPlus[0] существует, если есть хоть 1 человек с переработкой
+            fout << OverWorkedPersonPlus[0].first << " +" << OverWorkedPersonPlus[0].second;
 
         for (const auto& [name, time] : OverWorkedPersonPlus | std::views::drop(1))
         {
