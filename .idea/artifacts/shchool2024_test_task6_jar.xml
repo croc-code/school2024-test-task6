@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="shchool2024-test-task6:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/shchool2024_test_task6_jar</output-path>
+    <root id="archive" name="shchool2024-test-task6.jar">
+      <element id="module-output" name="shchool2024-test-task6" />
+    </root>
+  </artifact>
+</component>
