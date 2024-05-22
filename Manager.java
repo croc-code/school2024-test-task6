@@ -22,12 +22,9 @@ public class Manager {
     public void readTroughFile () {
         try {
             String line = input.readLine();
-            System.out.println(line);
             plannedHours = Float.parseFloat(line);
 
             line = input.readLine();
-
-            System.out.println(line);
 
             while (line != null) {
                 String[] args = line.split(" ");
@@ -38,7 +35,6 @@ public class Manager {
                     workerMap.put(args[0], new Worker(args[1], args[2], args[3], Float.parseFloat(args[5])));
                 }
                 line = input.readLine();
-                System.out.println(line);
             }
         } catch (Exception ignored) {}
     }
