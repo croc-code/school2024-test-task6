@@ -3,19 +3,19 @@ package solution;
 /**
  * Класс, представляющий информацию о дисбалансе для сотрудника.
  */
-public class DisbalanceInfo {
-    private String fullName;
-    private double disbalance;
+public class ImbalanceInfo {
+    private final String fullName;
+    private final double imbalance;
 
     /**
-     * Конструктор класса DisbalanceInfo.
+     * Конструктор класса ImbalanceInfo.
      *
      * @param fullName полное имя сотрудника
-     * @param disbalance дисбаланс для сотрудника
+     * @param imbalance дисбаланс для сотрудника
      */
-    public DisbalanceInfo(String fullName, double disbalance) {
+    public ImbalanceInfo(String fullName, double imbalance) {
         this.fullName = fullName;
-        this.disbalance = disbalance;
+        this.imbalance = imbalance;
     }
     /**
      * Метод для получения полного имени сотрудника.
@@ -30,8 +30,8 @@ public class DisbalanceInfo {
      *
      * @return значение дисбаланса
      */
-    public double getDisbalance() {
-        return disbalance;
+    public double getImbalance() {
+        return imbalance;
     }
 
     /**
@@ -41,10 +41,10 @@ public class DisbalanceInfo {
      */
     @Override
     public String toString() {
-        if(disbalance > 0) {
-            return String.format("%s +%.1f%n", fullName, disbalance);
+        if(imbalance > 0) {
+            return String.format("%s +%.1f%n", fullName, imbalance);
         }
-        return String.format("%s %.1f%n", fullName, disbalance);
+        return String.format("%s %.1f%n", fullName, imbalance);
     }
 
 

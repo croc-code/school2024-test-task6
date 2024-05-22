@@ -1,7 +1,6 @@
 package solution;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Класс FileParser выполняет парсинг списка строк для извлечения недельной нормы и записей.
@@ -48,7 +47,7 @@ public class FileParser {
                 .filter(line -> !line.isEmpty())
                 .skip(1)
                 .map(TSREntity::mapToInstance)
-                .collect(Collectors.toList());
+                .toList();
     }
     /**
      * Возвращает список записей типа {@link TSREntity}.

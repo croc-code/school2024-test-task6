@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Класс solution.FileHandler отвечает за чтение и запись строк из файлов.
+ * Класс FileHandler отвечает за чтение и запись строк из файлов.
  */
 public class FileHandler {
 
@@ -17,16 +17,7 @@ public class FileHandler {
      * @throws IOException Если файл "report.txt" не найден или возникла ошибка при чтении файла.
      */
     public List<String> readLines() throws IOException {
-        List<String> lines;
-        try (InputStream inputStream = getClass().getResourceAsStream("/report.txt")) {
-            if (inputStream == null) {
-                throw new IOException("File not found: report.txt");
-            }
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                lines = reader.lines().toList();
-            }
-        }
-        return lines;
+        return Files.readAllLines(Paths.get("report.txt"));
     }
 
     /**

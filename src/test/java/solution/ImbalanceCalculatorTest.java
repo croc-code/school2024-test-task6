@@ -7,12 +7,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DisbalanceCalculatorTest {
+class ImbalanceCalculatorTest {
     /**
-     * Тест для метода {@link DisbalanceCalculator#calculateDisbalances(int, List)}}.
+     * Тест для метода {@link ImbalanceCalculator#calculateImbalances(int, List)}}.
      */
     @Test
-    void calculateDisbalances() {
+    void calculateImbalance() {
         // Тестовые данные
         List<TSREntity> entities = Arrays.asList(
                 new TSREntity("Иванов", "Иван", "Иванович", 25.0),
@@ -23,7 +23,7 @@ class DisbalanceCalculatorTest {
                 new TSREntity("Мерькьюри", "Фредди", "Рокавич", 100.0)
         );
 
-        List<DisbalanceInfo> result = DisbalanceCalculator.calculateDisbalances(40, entities);
+        List<ImbalanceInfo> result = ImbalanceCalculator.calculateImbalances(40, entities);
 
         // Проверка, что результат соответствует ожидаемому списку дисбалансов
         assertEquals(4, result.size());
