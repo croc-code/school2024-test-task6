@@ -1,11 +1,12 @@
+package solution;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
- * Класс FileHandler отвечает за чтение и запись строк из файлов.
+ * Класс solution.FileHandler отвечает за чтение и запись строк из файлов.
  */
 public class FileHandler {
 
@@ -22,7 +23,7 @@ public class FileHandler {
                 throw new IOException("File not found: report.txt");
             }
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
-                lines = reader.lines().collect(Collectors.toList());
+                lines = reader.lines().toList();
             }
         }
         return lines;
